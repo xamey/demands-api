@@ -12,7 +12,6 @@
     "migration:seed": "bun src/db/seed.ts"
   },
   "dependencies": {
-    "@eajr/elylog": "^1.0.1",
     "@elysiajs/bearer": "^0.8.0",
     "@elysiajs/jwt": "^0.8.0",
     "drizzle-orm": "^0.29.3",

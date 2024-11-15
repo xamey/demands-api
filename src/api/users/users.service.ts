@@ -3,7 +3,6 @@ import { unauthorized, unprocessable } from "../../common/utils";
 import db from "../../db/connection";
 import { users } from "../../db/schema";
 import type { UserInsert } from "./users.schema";
-import { ILoggerFn, LogType } from "@eajr/elylog";
 
 export abstract class UserService {
   static async authenticate(email: string, password: string) {
