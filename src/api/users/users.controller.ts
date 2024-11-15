@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 import jwt from "../../common/jwt";
-import { checkAuth, forbidden, notFound, token } from "../../common/utils";
+import { checkAuth, forbidden, notFound } from "../../common/utils";
 import { userInsert } from "./users.schema";
 import { UserService } from "./users.service";
 import { formattedUser } from "./users.util";
@@ -20,7 +20,6 @@ const usersController = new Elysia()
       body: t.Object({ user: t.Pick(userInsert, ["email", "password"]) }),
     }
   )
-  .resolve(token)
   .resolve(checkAuth)
   .post(
     "users",

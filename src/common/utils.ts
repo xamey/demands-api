@@ -1,16 +1,16 @@
 import { error, type Context } from "elysia";
 import { UserService } from "../api/users/users.service";
+import { JwtContext } from "./jwt";
 
-export const token = async ({
+export const checkAuth = async ({
   headers: { authorization },
-}: Pick<Context, "headers">) => {
+  jwt,
+}: Pick<Context, "headers"> & JwtContext) => {
   if (!authorization || authorization.toString() === "") {
     throw unauthorized();
   }
-  return { token: authorization?.replace("Bearer ", "") };
-};
+  const token = authorization?.replace("Bearer ", "");
 
-export const checkAuth = async ({ token, jwt }) => {
   const payload = await jwt.verify(token);
   if (!payload) {
     throw unauthorized();
