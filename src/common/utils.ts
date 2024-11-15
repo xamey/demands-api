@@ -2,7 +2,7 @@ import { error, type Context } from "elysia";
 import { type JwtContext } from "./jwt";
 import { UserService } from "../api/users/users.service";
 
-export const getAuthUserId = async ({
+export const checkAuth = async ({
   headers: { authorization },
   jwt,
 }: Pick<Context, "headers"> & JwtContext) => {
@@ -13,11 +13,9 @@ export const getAuthUserId = async ({
     throw unauthorized();
   }
 
-  return { userId: +payload.id, token };
-};
+  const currentUser = await UserService.find(payload.id);
 
-export const getCurrentUser = async ({ userId }: { userId: number }) => {
-  return { currentUser: await UserService.find(userId) };
+  return { token, currentUser };
 };
 
 export function unauthorized(cause?: any) {
