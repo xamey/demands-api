@@ -1,10 +1,11 @@
 import { error, type Context } from "elysia";
 import { type JwtContext } from "./jwt";
+import { UserService } from "../api/users/users.service";
 
-export async function getAuthUserId({
+export const getAuthUserId = async ({
   headers: { authorization },
   jwt,
-}: Pick<Context, "headers"> & JwtContext) {
+}: Pick<Context, "headers"> & JwtContext) => {
   const token = authorization?.replace("Bearer ", "");
 
   const payload = await jwt.verify(token);
@@ -13,7 +14,11 @@ export async function getAuthUserId({
   }
 
   return { userId: +payload.id, token };
-}
+};
+
+export const getCurrentUser = async ({ userId }: { userId: number }) => {
+  return { currentUser: await UserService.find(userId) };
+};
 
 export function unauthorized(cause?: any) {
   return error(401, {

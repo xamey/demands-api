@@ -1,20 +1,23 @@
 import { Elysia, t } from "elysia";
 import jwt from "../../common/jwt";
-import { getAuthUserId, notFound, unauthorized } from "../../common/utils";
+import {
+  getAuthUserId,
+  getCurrentUser,
+  notFound,
+  unauthorized,
+} from "../../common/utils";
 import { userInsert } from "./users.schema";
 import { UserService } from "./users.service";
 import { formattedUser } from "./users.util";
 import { randomBytes } from "crypto";
-import { elylog, LogType } from "@eajr/elylog";
 
 const usersController = new Elysia()
   .use(jwt)
-  .use(elylog())
   .post(
     "users/login",
-    async ({ body, jwt, log }) => {
+    async ({ body, jwt }) => {
       const { email, password } = body.user;
-      const user = await UserService.authenticate(email, password, log);
+      const user = await UserService.authenticate(email, password);
       const token = await jwt.sign({ id: user.id });
       return { user: { ...formattedUser(user), token } };
     },
@@ -31,11 +34,10 @@ const usersController = new Elysia()
     (app) =>
       app
         .resolve(getAuthUserId)
-        .use(elylog())
+        .resolve(getCurrentUser)
         .post(
           "users",
-          async ({ body, userId, jwt }) => {
-            const currentUser = UserService.find(userId);
+          async ({ body, jwt, currentUser }) => {
             if (!currentUser?.superUser) {
               throw unauthorized();
             }
@@ -53,20 +55,17 @@ const usersController = new Elysia()
             }),
           }
         )
-        .get("user", async ({ userId, token, log }) => {
-          log(LogType.INFO, { message: `coucou userId: ${token}` });
-          const user = UserService.find(userId);
-          if (!user) {
+        .get("user", async ({ token, currentUser }) => {
+          if (!currentUser) {
             throw notFound();
           }
-          return { user: { ...formattedUser(user!), token } };
+          return { user: { ...formattedUser(currentUser), token } };
         })
-        .get("users", async ({ userId }) => {
-          const currentUser = UserService.find(userId);
+        .get("users", async ({ currentUser }) => {
           if (!currentUser?.superUser) {
             throw unauthorized();
           }
-          const users = await UserService.findAllExcept(userId);
+          const users = await UserService.findAllExcept(currentUser.id);
           return { users: users.map(formattedUser) };
         })
   );

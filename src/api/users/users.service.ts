@@ -6,22 +6,10 @@ import type { UserInsert } from "./users.schema";
 import { ILoggerFn, LogType } from "@eajr/elylog";
 
 export abstract class UserService {
-  static async create(body: UserInsert) {
-    body.password = await Bun.password.hash(body.password as string);
-    try {
-      const res = await db.insert(users).values(body).returning();
-      return res;
-    } catch (e) {
-      throw unprocessable(e);
-    }
-  }
-
-  static async authenticate(email: string, password: string, log: ILoggerFn) {
+  static async authenticate(email: string, password: string) {
     const user = (
       await db.select().from(users).where(eq(users.email, email)).limit(1)
     )[0];
-
-    if (!user) throw unauthorized();
 
     if (!user) throw unauthorized();
 
@@ -32,8 +20,24 @@ export abstract class UserService {
     return user;
   }
 
-  static find(id: number) {
-    return db.select().from(users).where(eq(users.id, id)).limit(1)[0];
+  static async find(id: number) {
+    return (await db.select().from(users).where(eq(users.id, id)).limit(1))[0];
+  }
+
+  static findAllExcept(id: number) {
+    return db.query.users.findMany({
+      where: not(eq(users.id, id)),
+    });
+  }
+
+  static async create(body: UserInsert) {
+    body.password = await Bun.password.hash(body.password as string);
+    try {
+      const res = await db.insert(users).values(body).returning();
+      return res;
+    } catch (e) {
+      throw unprocessable(e);
+    }
   }
 
   static update(id: number, data: Partial<UserInsert>) {
@@ -42,11 +46,5 @@ export abstract class UserService {
     } catch (e) {
       throw unprocessable(e);
     }
-  }
-
-  static findAllExcept(id: number) {
-    return db.query.users.findMany({
-      where: not(eq(users.id, id)),
-    });
   }
 }
