@@ -17,7 +17,8 @@
     "drizzle-orm": "^0.29.3",
     "drizzle-typebox": "^0.1.1",
     "elysia": "^0.8.15",
-    "sql-log-prettifier": "^0.1.2"
+    "sql-log-prettifier": "^0.1.2",
+    "dayjs": "^1.11.13"
   },
   "devDependencies": {
     "@types/node": "^20.11.5",
