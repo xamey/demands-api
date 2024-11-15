@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "dd2e163e-e7ac-44a7-8087-26e367729895",
+  "id": "3c0104e6-57c9-405e-8aae-4171db3f758b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "dayoffs": {
@@ -25,8 +25,9 @@
           "name": "date",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
         },
         "status": {
           "name": "status",
@@ -35,14 +36,6 @@
           "notNull": true,
           "autoincrement": false,
           "default": "'pending'"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
         }
       },
       "indexes": {
@@ -110,6 +103,14 @@
           "notNull": false,
           "autoincrement": false,
           "default": false
+        },
+        "date": {
+          "name": "date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
         }
       },
       "indexes": {

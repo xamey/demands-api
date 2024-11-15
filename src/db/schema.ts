@@ -9,6 +9,7 @@ export const users = sqliteTable("users", {
   name: text("name").notNull(),
   password: text("password").notNull(),
   superUser: integer("super_user", { mode: "boolean" }).default(false),
+  createdAt: text("date").default(sql`CURRENT_TIMESTAMP`),
 });
 
 export const dayoffs = sqliteTable("dayoffs", {
@@ -19,6 +20,8 @@ export const dayoffs = sqliteTable("dayoffs", {
     .notNull()
     .references(() => users.id),
   date: text("date").notNull(),
-  status: text("status").notNull().default("pending"),
-  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+  status: text("status", { enum: ["pending", "approved", "refused"] })
+    .notNull()
+    .default("pending"),
+  createdAt: text("date").default(sql`CURRENT_TIMESTAMP`),
 });

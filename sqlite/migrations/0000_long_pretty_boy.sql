@@ -1,9 +1,8 @@
 CREATE TABLE `dayoffs` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`user_id` integer NOT NULL,
-	`date` text NOT NULL,
+	`date` text DEFAULT CURRENT_TIMESTAMP,
 	`status` text DEFAULT 'pending' NOT NULL,
-	`created_at` text DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -12,7 +11,8 @@ CREATE TABLE `users` (
 	`email` text NOT NULL,
 	`name` text NOT NULL,
 	`password` text NOT NULL,
-	`super_user` integer DEFAULT false
+	`super_user` integer DEFAULT false,
+	`date` text DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `dayoffs_id_unique` ON `dayoffs` (`id`);--> statement-breakpoint
