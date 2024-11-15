@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 import jwt from "../../common/jwt";
-import { checkAuth, forbidden, notFound } from "../../common/utils";
+import { checkAuth, forbidden, unauthorized } from "../../common/utils";
 import { userInsert } from "./users.schema";
 import { UserService } from "./users.service";
 import { formattedUser } from "./users.util";
@@ -49,7 +49,7 @@ const usersController = new Elysia()
   })
   .get("users", async ({ currentUser }) => {
     if (!currentUser?.superUser) {
-      throw forbidden();
+      throw unauthorized();
     }
     const users = await UserService.findAllExcept(currentUser.id);
     return { users: users.map(formattedUser) };
