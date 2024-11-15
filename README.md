@@ -12,6 +12,7 @@ To launch the server, run `bun dev`.
 # API endpoints documentation - Postman
 
 - [Auth](https://www.postman.com/aerospace-saganist-97722033/demands/collection/rajwc63/users?action=share&creator=25637739)
+- [Dayoffs](https://www.postman.com/aerospace-saganist-97722033/demands/collection/ugiftw8/dayoffs?action=share&creator=25637739)
 
 # Architecture
 
