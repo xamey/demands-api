@@ -1,13 +1,16 @@
 import { error, type Context } from "elysia";
-import { type JwtContext } from "./jwt";
 import { UserService } from "../api/users/users.service";
 
-export const checkAuth = async ({
+export const token = async ({
   headers: { authorization },
-  jwt,
-}: Pick<Context, "headers"> & JwtContext) => {
-  const token = authorization?.replace("Bearer ", "");
+}: Pick<Context, "headers">) => {
+  if (!authorization || authorization.toString() === "") {
+    throw unauthorized();
+  }
+  return { token: authorization?.replace("Bearer ", "") };
+};
 
+export const checkAuth = async ({ token, jwt }) => {
   const payload = await jwt.verify(token);
   if (!payload) {
     throw unauthorized();
@@ -21,6 +24,12 @@ export const checkAuth = async ({
 export function unauthorized(cause?: any) {
   return error(401, {
     errors: { body: [cause ? `${cause}` : "Invalid credentials"] },
+  });
+}
+
+export function forbidden(cause?: any) {
+  return error(403, {
+    errors: { body: [cause ? `${cause}` : "Forbidden"] },
   });
 }
 
