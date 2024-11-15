@@ -1,6 +1,7 @@
 import { Elysia, ValidationError } from "elysia";
 import { unprocessable } from "./common/utils";
 import usersController from "./api/users/users.controller";
+import dayOffsController from "./api/dayoffs/dayoffs.controller";
 
 const app = new Elysia()
   .onError(({ set, error }) => {
@@ -22,6 +23,7 @@ const app = new Elysia()
     }
   })
   .use(usersController)
+  .use(dayOffsController)
   .listen(3000);
 
 export type App = typeof app;
