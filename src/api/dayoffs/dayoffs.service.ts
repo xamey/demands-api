@@ -5,6 +5,8 @@ import { DayOffInsert } from "./dayoffs.schema";
 import { unprocessable } from "../../common/utils";
 
 export abstract class DayOffsService {
+  static max = 9;
+
   static async collect(userId: number) {
     return db.query.dayoffs.findMany({
       where: eq(dayoffs.userId, userId),

@@ -1,6 +1,11 @@
 import { Elysia, t } from "elysia";
 import jwt from "../../common/jwt";
-import { checkAuth, forbidden, unauthorized } from "../../common/utils";
+import {
+  checkAuth,
+  forbidden,
+  notFound,
+  unauthorized,
+} from "../../common/utils";
 import { userInsert } from "./users.schema";
 import { UserService } from "./users.service";
 import { formattedUser } from "./users.util";

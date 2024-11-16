@@ -8,8 +8,18 @@ import { formatDayOff } from "./dayoffs.util";
 const dayOffsController = new Elysia()
   .use(jwt)
   .resolve(checkAuth)
+  .get("dayoffs/max", async () => {
+    return DayOffsService.max;
+  })
   .get("dayoffs", async ({ currentUser }) => {
     const dayOffs = await DayOffsService.collect(currentUser.id);
+    return { dayOffs: dayOffs.map(formatDayOff) };
+  })
+  .get("dayoffs/:user_id", async ({ params }) => {
+    const dayOffs = await DayOffsService.collect(Number(params.user_id));
+    if (!dayOffs) {
+      return notFound();
+    }
     return { dayOffs: dayOffs.map(formatDayOff) };
   })
   .post(
@@ -27,7 +37,10 @@ const dayOffsController = new Elysia()
     },
     {
       body: t.Object({
-        dayoff: t.Pick(dayOffInsert, ["date", "userId"]),
+        dayoff: t.Object({
+          date: t.String(),
+          userId: t.Optional(t.Number()),
+        }),
       }),
     }
   )

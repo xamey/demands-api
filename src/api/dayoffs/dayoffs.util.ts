@@ -4,9 +4,3 @@ export function formatDayOff(dayOff: DayOff) {
   const { id, date, status } = dayOff;
   return { id, date, status };
 }
-
-export enum DayOffStatus {
-  Pending = "pending",
-  Accepted = "approved",
-  Refused = "refused",
-}
