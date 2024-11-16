@@ -1,5 +1,10 @@
 import { Elysia, t } from "elysia";
-import { checkAuth, forbidden, notFound } from "../../common/utils";
+import {
+  checkAuth,
+  forbidden,
+  notFound,
+  unprocessable,
+} from "../../common/utils";
 import { DayOffsService } from "./dayoffs.service";
 import jwt from "../../common/jwt";
 import { dayOffInsert } from "./dayoffs.schema";
@@ -27,6 +32,12 @@ const dayOffsController = new Elysia()
     async ({ body, currentUser }) => {
       if (body.dayoff.userId && !currentUser.superUser) {
         return forbidden();
+      }
+
+      const dayOffDate = new Date(body.dayoff.date);
+      const currentYear = new Date().getFullYear();
+      if (dayOffDate.getFullYear() !== currentYear) {
+        return unprocessable("Invalid year");
       }
 
       const [dayOff] = await DayOffsService.create(currentUser.id, {
