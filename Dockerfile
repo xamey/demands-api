@@ -14,14 +14,14 @@ COPY . .
 # Install node modules
 RUN bun install
 
-# # Run bun:migration:create if DB_CREATE is set
-# RUN if [ "$DB_CREATE" = "true" ]; then bun run migration:create; fi
-# # Run bun:migration:run if DB_RUN is set
-# RUN if [ "$DB_RUN" = "true" ]; then bun run migration:run; fi
-# # Run bun:migration:seed if DB_SEED is set
-# RUN if [ "$DB_SEED" = "true" ]; then bun run migration:seed; fi
-# # Run bun:migration:drop if DB_DROP is set
-# RUN if [ "$DB_DROP" = "true" ]; then bun run migration:drop; fi
+# Run bun:migration:create if DB_CREATE is set
+RUN if [ "$DB_CREATE" = "true" ]; then bun run migration:create; fi
+# Run bun:migration:run if DB_RUN is set
+RUN if [ "$DB_RUN" = "true" ]; then bun run migration:run; fi
+# Run bun:migration:seed if DB_SEED is set
+RUN if [ "$DB_SEED" = "true" ]; then bun run migration:seed; fi
+# Run bun:migration:drop if DB_DROP is set
+RUN if [ "$DB_DROP" = "true" ]; then bun run migration:drop; fi
 
 RUN apt-get -y update; apt-get -y install curl
 
