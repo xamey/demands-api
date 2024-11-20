@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
     "db:push": "bun run src/db/schema.ts",
     "migration:create": "drizzle-kit generate:sqlite",
     "migration:drop": "drizzle-kit drop",
